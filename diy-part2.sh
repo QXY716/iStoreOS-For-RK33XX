@@ -74,7 +74,7 @@ sed -i "s/rk3399,r08)/rk3399,r08|\\\\\n	rk3399,tpm312)/g" target/linux/rockchip/
 
 
 # 复制和修改u-boot压缩包SHA256校验码，编译失败时注意看是不是这个引起的。
-cp -f $GITHUB_WORKSPACE/configfiles/Makefile package/boot/uboot-rockchip/Makefile
+cp -f $GITHUB_WORKSPACE/configfiles/uboot_Makefile package/boot/uboot-rockchip/Makefile
 sha256_value=$(wget -qO- "https://github.com/xiaomeng9597/files/releases/download/u-boot-2021.07/u-boot-2021.07.tar.bz2.sha" | awk '{print $1}')
 if [ -n "$sha256_value" ]; then
 sed -i "s/.*PKG_HASH:=.*/PKG_HASH:=$sha256_value/g" package/boot/uboot-rockchip/Makefile
@@ -106,13 +106,13 @@ cp -f $GITHUB_WORKSPACE/configfiles/rk3399-r08.dts package/boot/uboot-rockchip/s
 cp -f $GITHUB_WORKSPACE/configfiles/rk3399-tpm312.dts package/boot/uboot-rockchip/src/arch/arm/dts/rk3399-tpm312.dts
 
 
-#开启无线功能
+#开启无线功能，已移除Realtek相关无线驱动，暂时这个不可用，原因兼容性不好，异常掉线
 # cp -f $GITHUB_WORKSPACE/configfiles/opwifi package/base-files/files/etc/init.d/opwifi
 # chmod 755 package/base-files/files/etc/init.d/opwifi
 # sed -i "s/wireless.radio\${devidx}.disabled=1/wireless.radio\${devidx}.disabled=0/g" package/kernel/mac80211/files/lib/wifi/mac80211.sh
 
 
 #集成CPU性能跑分脚本
-cp -a $GITHUB_WORKSPACE/configfiles/coremark/* package/base-files/files/sbin/
-chmod 755 package/base-files/files/sbin/coremark
-chmod 755 package/base-files/files/sbin/coremark.sh
+cp -a $GITHUB_WORKSPACE/configfiles/coremark/* package/base-files/files/bin/
+chmod 755 package/base-files/files/bin/coremark
+chmod 755 package/base-files/files/bin/coremark.sh
